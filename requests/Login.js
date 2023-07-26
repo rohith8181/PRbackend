@@ -30,7 +30,7 @@ router.post('/request/login', async (req, res) => {
                 const token = generatetoken(email);
                 user.verificationToken = token;
                 await user.save();
-                const link = `http://localhost:3000/verify/${token}`;
+                const link = `https://64c133dd85496f104015610b--euphonious-melomakarona-254aa9.netlify.app/verify/${token}`;
                 sendMail(email, link);
 
                 return res.json({ status: 201, message: "Email not Veified" });
