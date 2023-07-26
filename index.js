@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require("cors");
 app.use(cors());
+const PORT = process.env.PORT || 5000
 
 require('dotenv').config();
 const path = require('path');
@@ -15,7 +16,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-// app.use('/verify', verifyRouter);
 app.use(require('./requests/Answer'))
 app.use(require('./requests/Userdetails'))
 app.use(require('./requests/Signup'))
@@ -29,6 +29,6 @@ app.use(require('./requests/reputation'))
 app.use(require('./requests/Notifications'))
 app.use(require('./requests/AdminRequests'))
 
-app.listen(5000, () => {
-    console.log('server running at 5000')
+app.listen(PORT, () => {
+    console.log(`server running at ${PORT}`)
 });
