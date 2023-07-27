@@ -44,7 +44,7 @@ router.get('/request/answers', async (req, res) => {
 
             case "PopularChoice":
                 const mostanswers = await Answer.aggregate([
-                    { questionId: questionid },
+                    { $match: { questionId: questionid } },
                     {
                         $project: {
                             questionid: 1,

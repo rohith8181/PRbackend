@@ -26,7 +26,6 @@ router.post('/request/answer/upvote', async (req, res) => {
     const { AnsID, userId } = req.body;
 
     const answer = await Answer.findById(AnsID).populate('userId', 'name email Profilepic role')
-    // console.log("upvote question", answer);
 
     if (answer.upvotes.includes(userId)) {
         answer.upvotes.pull(userId);
