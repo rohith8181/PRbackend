@@ -28,6 +28,7 @@ router.post('/request/answer/upvote', async (req, res) => {
     const answer = await Answer.findById(AnsID).populate('userId', 'name email Profilepic role')
 
     if (answer.upvotes.includes(userId)) {
+        console.log("already upvoteed removing now")
         answer.upvotes.pull(userId);
         await answer.save();
         return res.status(200).json({ success: true, answer: answer });
@@ -44,10 +45,12 @@ router.post('/request/answer/upvote', async (req, res) => {
 
 router.post('/request/question/downvote', async (req, res) => {
     const { QuesID, userId } = req.body;
-
+    console.log("consoling")
     const question = await Question.findById(QuesID).populate('userId', 'name email Profilepic role');
 
     if (question.downvotes.includes(userId)) {
+        console.log("already upvoteed removing now")
+
         question.downvotes.pull(userId);
         await question.save();
         return res.status(200).json({ success: true, question: question });
@@ -68,6 +71,7 @@ router.post('/request/answer/downvote', async (req, res) => {
     const answer = await Answer.findById(AnsID).populate('userId', 'name email Profilepic role');
 
     if (answer.downvotes.includes(userId)) {
+        console.log("Already downvoted removing now")
         answer.downvotes.pull(userId);
         await answer.save();
         return res.status(200).json({ success: true, answer: answer });

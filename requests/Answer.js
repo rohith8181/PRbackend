@@ -3,6 +3,7 @@ const Answer = require('../Schema/AnswerSchema');
 const Question = require('../Schema/QuestionSchema');
 const Notification = require('../Schema/NotificationSchema');
 const User = require('../Schema/UserSchema');
+const mongoose = require('mongoose');
 const router = express.Router();
 
 router.get('/request/fullquestion', async (req, res) => {
@@ -28,6 +29,7 @@ router.get('/request/answers', async (req, res) => {
 
     try {
 
+        const questionIdObj = new mongoose.Types.ObjectId(questionid);
         switch (sortType) {
             case "latest":
                 const latestanswers = await Answer.find({ questionId: questionid })
@@ -44,10 +46,10 @@ router.get('/request/answers', async (req, res) => {
 
             case "PopularChoice":
                 const mostanswers = await Answer.aggregate([
-                    { $match: { questionId: questionid } },
+                    { $match: { questionId: questionIdObj } },
                     {
                         $project: {
-                            questionid: 1,
+                            questionId: 1,
                             userId: 1,
                             content: 1,
                             createdAt: 1,
@@ -85,7 +87,7 @@ router.get('/request/answers', async (req, res) => {
                             upvotesCount: 1
                         }
                     }
-                ])
+                ]);
                 return res.status(200).json({ answers: mostanswers });
             case "relevance":
                 const relevanceanswers = await Answer.find({ questionId: questionid })
@@ -99,6 +101,7 @@ router.get('/request/answers', async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        console.log("popular")
         res.status(500).json({ success: false, answers: [] });
     }
 })

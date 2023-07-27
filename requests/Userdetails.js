@@ -84,7 +84,6 @@ router.get('/request/fetchuserrecords', async (req, res) => {
                 options: { sort: { createdAt: -1 } },
             });
 
-        // console.log("user", user);
         if (user) {
             return res.status(200).json({ success: true, records: user });
         }
