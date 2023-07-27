@@ -164,8 +164,9 @@ router.delete('/request/userdelete', async (req, res) => {
         await Academic.deleteMany({ userId: userid })
         await Comment.deleteMany({ userId: userid })
         await Notification.deleteMany({ userId: userid })
+        await User.deleteOne({ _id: userid });
 
-        res.status(200).json({ success: true })
+        res.status(200).json({ success: true, message: "User Deleted" })
     } catch (err) {
         console.log(err);
         res.status(500).json({ success: false })
