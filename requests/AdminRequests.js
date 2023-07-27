@@ -3,10 +3,12 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const Question = require('../Schema/QuestionSchema');
 const Admin = require('../Schema/AdminSchema')
+const Comment = require('../Schema/CommentSchema')
 const Academic = require('../Schema/AcademicHelpSchema')
 const Answer = require('../Schema/AnswerSchema')
 const Petition = require('../Schema/PetitionSchema');
 const User = require('../Schema/UserSchema');
+const Notification = require("../Schema/NotificationSchema");
 const adtkngen = require('../Config/Tokengenerator');
 
 
@@ -140,15 +142,30 @@ router.post('/request/addadmin', async (req, res) => {
     }
 })
 
-router.delete('/request/addelete', async (req, res) => {
-    const { role, name } = req.query
+router.delete('/request/admindelete', async (req, res) => {
+    const { name } = req.query
+
+    try {
+        await Admin.deleteOne({ name: name })
+        res.status(200).json({ success: true, message: "Admin Deleted" })
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false })
+    }
+})
+router.delete('/request/userdelete', async (req, res) => {
+    const { userid } = req.query
     try {
 
-        if (role === 'Admin') {
-            await Admin.deleteOne({ name: name })
+        await Question.deleteMany({ userId: userid })
+        await Answer.deleteMany({ userId: userid })
+        await Petition.deleteMany({ userId: userid })
+        await Academic.deleteMany({ userId: userid })
+        await Comment.deleteMany({ userId: userid })
+        await Notification.deleteMany({ userId: userid })
 
-            return res.status(200).json({ success: true, message: "Admin Deleted" })
-        }
+        res.status(200).json({ success: true })
     } catch (err) {
         console.log(err);
         res.status(500).json({ success: false })

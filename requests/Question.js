@@ -170,13 +170,14 @@ router.post('/request/question', async (req, res) => {
 
         const subscribers = await User.find({ _id: { $in: user.subscribers } });
 
-
-        await Notification.create({
-            userId: user.id,
-            subId: subscribers,
-            link: `/question/${Ques.id}`,
-            content: "A new Question has been added by " + user.name,
-        })
+        if (!Ques.isAnonymous) {
+            await Notification.create({
+                userId: user.id,
+                subId: subscribers,
+                link: `/question/${Ques.id}`,
+                content: "A new Question has been added by " + user.name,
+            })
+        }
         res.send({
             status: 200,
             message: "created success"
@@ -201,7 +202,7 @@ router.get('/request/hashtags/popular', async (req, res) => {
             { $unwind: '$hashtags' }, // Unwind the array field 'hashtags'
             { $group: { _id: '$hashtags', count: { $sum: 1 } } },
             { $sort: { count: -1 } },
-            { $limit: 15 } // Adjust the limit as per your requirements
+            { $limit: 8 } // Adjust the limit as per your requirements
         ]);
         // console.log("hastags", popularHashtags);
         return res.json({ success: true, popularHashtags });
