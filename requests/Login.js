@@ -30,7 +30,7 @@ router.post('/request/login', async (req, res) => {
                 const token = generatetoken(email);
                 user.verificationToken = token;
                 await user.save();
-                const link = `${CLIENT_LINK}/verify/${token}`;
+                const link = `${process.env.CLIENT_LINK}/verify/${token}`;
                 sendMail(email, link);
 
                 return res.json({ status: 201, message: "Email not Veified" });
@@ -40,7 +40,7 @@ router.post('/request/login', async (req, res) => {
         return res.json({ status: 304, message: "Password Incorrect" });
 
     } catch (err) {
-        console.log("found error");
+        console.log(err);
         res.send({
             status: 500,
             message: "Internal error"

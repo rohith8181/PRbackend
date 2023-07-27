@@ -57,7 +57,7 @@ router.post('/request/signup', async (req, res) => {
       role: role,
     });
 
-    const link = `${CLIENT_LINK}/verify/${token}`;
+    const link = `${process.env.CLIENT_LINK}/verify/${token}`;
 
     sendMail(email, link);
     res.send({
