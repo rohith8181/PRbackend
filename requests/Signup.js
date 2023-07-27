@@ -57,7 +57,7 @@ router.post('/request/signup', async (req, res) => {
       role: role,
     });
 
-    const link = `https://64c133dd85496f104015610b--euphonious-melomakarona-254aa9.netlify.app/verify/${token}`;
+    const link = `${CLIENT_LINK}/verify/${token}`;
 
     sendMail(email, link);
     res.send({
