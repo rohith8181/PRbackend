@@ -10,7 +10,7 @@ router.get('/request/fullquestion', async (req, res) => {
     const { questionid } = req.query;
     try {
         const question = await Question.findById(questionid)
-            .populate('userId', 'name email Profilepic')
+            .populate('userId', 'name email Profilepic role')
 
         if (question) {
             return res.status(200).json({ Isexists: true, question: question });
