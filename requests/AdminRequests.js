@@ -169,7 +169,7 @@ router.delete('/request/userdelete', async (req, res) => {
         res.status(200).json({ success: true, message: "User Deleted" })
     } catch (err) {
         console.log(err);
-        res.status(500).json({ success: false })
+        res.status(500).json({ success: false, message: "Internal Error" })
     }
 })
 
