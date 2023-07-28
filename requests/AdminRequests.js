@@ -34,7 +34,7 @@ router.post('/request/adminLogin', async (req, res) => {
 
 router.get('/request/Anonyquestions', async (req, res) => {
     try {
-        const questions = await Question.find({ isVerified: false }).populate('userId', 'name email Profilepic role')
+        const questions = await Question.find({ isVerified: false, isAnonymous: true }).populate('userId', 'name email Profilepic role')
         // console.log(questions);
         res.status(200).json({ success: true, questions: questions });
     }
@@ -89,6 +89,9 @@ router.get('/request/qapprove', async (req, res) => {
     try {
         const Ques = await Question.findById(questionId)
         Ques.isVerified = true
+        Ques.reports.map((item) => (
+            Ques.reports.pull(item)
+        ))
         await Ques.save();
 
         res.status(200).json({ success: true, message: "Question Approved Success✅" })
@@ -212,11 +215,13 @@ router.get('/request/reportedquestions', async (req, res) => {
             {
                 $project: {
                     _id: 1,
-                    userId: '$userDetails._id',
-                    name: '$userDetails.name',
-                    email: '$userDetails.email',
-                    Profilepic: '$userDetails.Profilepic',
-                    role: '$userDetails.role',
+                    userId: {
+                        _id: '$userDetails._id',
+                        email: '$userDetails.email',
+                        name: '$userDetails.name',
+                        Profilepic: '$userDetails.Profilepic',
+                        role: '$userDetails.role'
+                    },
                     content: 1,
                     isAnonymous: 1,
                     isVerified: 1,

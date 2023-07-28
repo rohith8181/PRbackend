@@ -135,7 +135,10 @@ router.get('/request/reportquestion', async (req, res) => {
 
         Ques.reports.push(userId);
         await Ques.save();
-
+        if (Ques.reports.length > 4 && Ques.isVerified === true) {
+            Ques.isVerified = false;
+        }
+        await Ques.save();
         res.status(200).json({
             success: true,
             code: 1,

@@ -65,7 +65,7 @@ router.get('/request/fetchuserrecords', async (req, res) => {
         const user = await User.findById(userid)
             .populate({
                 path: 'Questionsasked',
-                select: 'content createdAt isAnonymous',
+                select: 'content createdAt isAnonymous isVerified',
                 options: { sort: { createdAt: -1 } },
             })
             .populate({
