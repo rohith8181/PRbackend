@@ -84,6 +84,12 @@ router.put('/request/question/:quesId/reputation', async (req, res) => {
             relevanceScore += Ques.answers.length * 0.4;
             relevanceScore += Ques.hashtags.length * 0.1;
             relevanceScore += Ques.userId.reputation * 0.3;
+            const today = new Date();
+            const tenDaysAgo = new Date();
+            tenDaysAgo.setDate(today.getDate() - 10);
+            const timeWeight = Ques.createdAt >= tenDaysAgo ? 1.7 : 1;
+
+            relevanceScore += timeWeight * relevanceScore;
 
             Ques.relevanceScore = relevanceScore;
 
@@ -192,6 +198,13 @@ router.put('/request/answer/:ansid/reputation', async (req, res) => {
         // sentiment weight
         relevanceScore *= sentimentweight;
 
+        const today = new Date();
+        const tenDaysAgo = new Date();
+        tenDaysAgo.setDate(today.getDate() - 10);
+        const timeWeight = Ans.createdAt >= tenDaysAgo ? 1.7 : 1;
+
+        relevanceScore += timeWeight * relevanceScore;
+
         Ans.relevanceScore = relevanceScore;
         await Ans.save();
 
@@ -257,6 +270,12 @@ router.put('/request/academicpost/:postid/reputation', async (req, res) => {
             relevanceScore *= 0.6;
         }
 
+        const today = new Date();
+        const tenDaysAgo = new Date();
+        tenDaysAgo.setDate(today.getDate() - 10);
+        const timeWeight = post.createdAt >= tenDaysAgo ? 1.7 : 1;
+
+        relevanceScore += timeWeight * relevanceScore;
         post.relevanceScore = relevanceScore;
         await post.save();
 
