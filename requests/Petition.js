@@ -69,7 +69,7 @@ router.get('/request/petition', async (req, res) => {
     try {
 
         const Pet = await Petition.findById(Petitionid).populate('userId', 'name email Profilepic')
-
+        console.log(Pet);
         if (Pet) {
             if (!Pet.isexpired) {
                 const expirationDate = new Date(Pet.createdAt);
@@ -82,7 +82,7 @@ router.get('/request/petition', async (req, res) => {
             }
             return res.status(200).json({ Isexists: true, petition: Pet });
         }
-        res.status(404).json({ Isexists: false });
+        res.json({ Isexists: false, petition: [] });
 
     } catch (err) {
         console.log(err);
