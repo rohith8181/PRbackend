@@ -129,6 +129,7 @@ router.post('/request/answer', async (req, res) => {
             userId: user.id,
             subId: subscribers,
             content: "A new Answer has been added by " + user.name,
+            link: `/question/${questionid}`
         })
         res.send({
             status: 200,
