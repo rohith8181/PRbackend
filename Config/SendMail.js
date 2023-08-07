@@ -28,6 +28,14 @@ const sendMail = async (receiveraddress, link) => {
   </div>`
   });
 };
+const sendforgotmail = async (receiveraddress, password) => {
+  const info = await transporter.sendMail({
+    from: '18@gmail.com', // sender address
+    to: receiveraddress, // list of receivers
+    subject: "Genarated New Password", // Subject line
+    html: `<p>Your New Password : ${password}</p>`
+  });
+};
 
 
-module.exports = sendMail;
+module.exports = { sendMail, sendforgotmail };

@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 
 
 const generatetoken = require('../Config/Tokengenerator');
-const sendMail = require('../Config/SendMail');
+const { sendMail } = require('../Config/SendMail');
 
 router.get('/verify/:token', async (req, res) => {
   const { token } = req.params;
