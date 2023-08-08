@@ -100,7 +100,7 @@ router.get('/request/usersearch', async (req, res) => {
 
     try {
 
-        const users = await User.find({ email: { $regex: useremail, $options: 'i' } });
+        const users = await User.find({ email: { $regex: useremail, $options: 'i' }, isVerified: true });
         // console.log(users);
         if (users) {
             return res.status(200).json({ success: true, users: users });

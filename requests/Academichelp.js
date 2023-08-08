@@ -16,24 +16,18 @@ router.post('/request/upload', upload.single('image'), (req, res) => {
     return res.status(400).json({ error: 'No image file provided' });
   }
 
-  // Generate a unique filename
   const uniqueFilename = `${Date.now()}-${req.file.originalname}`;
 
-  // Define the desired storage location
   const storageLocation = path.join('public', 'images', uniqueFilename);
 
-  // Move the uploaded file to the desired location
   fs.rename(req.file.path, storageLocation, (error) => {
-    // console.log(req.file.path);
     if (error) {
       console.log('Error occurred while moving the file:', error);
       return res.status(500).json({ error: 'Failed to store the image' });
     }
 
-    // Provide the URL or relative path of the stored image
     const imageUrl = `/images/${uniqueFilename}`;
 
-    // Send the response with the image URL
     return res.status(200).json({ success: true, imageUrl });
   });
 });
@@ -73,16 +67,11 @@ router.post('/request/addpost', async (req, res) => {
 router.post('/request/remove-images', async (req, res) => {
   const { imageUrls } = req.body;
 
-  // Iterate over the imageUrls array
   imageUrls.forEach((imageUrl) => {
-    // Get the filename from the imageUrl
     const filename = path.basename(imageUrl);
-    // Construct the file path to the public/images folder
     const imagePath = path.join('public', 'images', filename);
-    // Remove the image file using fs.unlink
     fs.unlink(imagePath, (err) => {
       if (err) {
-        // Handle any errors that occur during file removal
         console.error(`Failed to remove image: ${imageUrl}`, err);
       } else {
         console.log(`Image removed: ${imageUrl}`);
